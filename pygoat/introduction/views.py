@@ -17,6 +17,7 @@ from xml.sax import make_parser
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
 import subprocess
+import re
 import pickle
 import base64
 import yaml
@@ -302,6 +303,8 @@ def cmd_lab(request):
         if(request.method=="POST"):
             domain=request.POST.get('domain')
             domain=domain.replace("https://www.",'')
+            if not re.match('^[a-zA-Z0-9_\-/\\]+$', domain):
+                return render(request, 'Lab/CMD/cmd_lab.html', {"output": "Invalid input"})
             os=request.POST.get('os')
             print(os)
             if(os=='win'):
